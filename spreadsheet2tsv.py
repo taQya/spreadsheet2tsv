@@ -18,11 +18,19 @@ def read(filepath, sheetname):
 			for row in node.iter(SS + "Row"):
 				single_row = []
 				for r in row:
+					index =  r.get(SS + "Index")
+					if index is not None:
+						while int(index) - 1 > len(single_row):
+							single_row.append("")
+
 					data = r.find(SS + "Data")
 					if data is None or data.text is None:
 						single_row.append("")
 					else:
-						single_row.append(data.text)
+						text = data.text
+						if data.get(SS + "Type") == "String":
+							text = "\"" + text + "\""
+						single_row.append(text)
 
 				sheetdata.append(single_row)
 
